@@ -6,3 +6,4 @@ This app demonstrates the following:
 + floating action button
 + android-architecture component
 + ViewModel
++ sharedPreferences is used to save current state of quote(index).

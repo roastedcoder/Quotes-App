@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
 import java.nio.charset.Charset
 
-class MainViewModel(private val context: Context): ViewModel() {
+class MainViewModel(private val context: Context, private val onStartIndex: Int): ViewModel() {
 
     private var quotes: Array<Quote> = emptyArray()
     private var index: Int = 0
@@ -15,6 +15,7 @@ class MainViewModel(private val context: Context): ViewModel() {
     init {
         quotes = loadQuotesFromAssets()
         size = quotes.size
+        index = onStartIndex
     }
 
     private fun loadQuotesFromAssets(): Array<Quote> {
@@ -39,4 +40,6 @@ class MainViewModel(private val context: Context): ViewModel() {
         index %= size
         return quotes[index]
     }
+
+    fun getIndex() = index
 }
