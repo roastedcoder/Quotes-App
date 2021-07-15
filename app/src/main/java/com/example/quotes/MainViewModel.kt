@@ -1,10 +1,8 @@
 package com.example.quotes
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
-import java.nio.charset.Charset
 
 class MainViewModel(private val context: Context, private val onStartIndex: Int): ViewModel() {
 
@@ -15,6 +13,7 @@ class MainViewModel(private val context: Context, private val onStartIndex: Int)
     init {
         quotes = loadQuotesFromAssets()
         size = quotes.size
+
         index = onStartIndex
     }
 
@@ -31,15 +30,21 @@ class MainViewModel(private val context: Context, private val onStartIndex: Int)
         return gson.fromJson(json, Array <Quote>::class.java)
     }
 
-    fun getQuote() = quotes[index]
+    fun getQuote(): TmpQuote {
+        return TmpQuote(quotes[index].text, quotes[index].author, index +1)
+    }
 
-    fun nextQuote() = quotes[(++index)%size]
+    fun nextQuote(): TmpQuote {
+        (index++)%size
+        return TmpQuote(quotes[index].text, quotes[index].author, index +1)
+    }
 
-    fun previousQuote(): Quote {
+    fun previousQuote(): TmpQuote {
         index -= 1-size
         index %= size
-        return quotes[index]
+        return TmpQuote(quotes[index].text, quotes[index].author, index +1)
     }
 
     fun getIndex() = index
+    fun getSize() = size
 }
