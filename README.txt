@@ -7,3 +7,6 @@ This app demonstrates the following:
 + android-architecture component
 + ViewModel
 + sharedPreferences is used to save current state of quote(index).
+
+Screenshots
+![](screenshots/activity_main.jpg)

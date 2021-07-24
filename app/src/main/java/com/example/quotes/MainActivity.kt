@@ -1,7 +1,9 @@
 package com.example.quotes
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -103,4 +105,6 @@ class MainActivity : AppCompatActivity() {
             apply()
         }
     }
+
+    fun onSearch(view: View) {}
 }
