@@ -8,5 +8,5 @@ This app demonstrates the following:
 + ViewModel
 + sharedPreferences is used to save current state of quote(index).
 
-Screenshots
+###Screenshots
 ![](screenshots/activity_main.jpg)
