@@ -9,4 +9,5 @@ This app demonstrates the following:
 + sharedPreferences is used to save current state of quote(index).
 
 ###Screenshots
+
 ![](screenshots/activity_main.jpg)
