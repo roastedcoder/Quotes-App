@@ -1,5 +1,5 @@
 ## Quote
-This is a quote android application where user can get/share a quote.
+This is a quote android application where user can see/share a quote.
 
 This app demonstrates the following:
 + layouts
