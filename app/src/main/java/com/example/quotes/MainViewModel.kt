@@ -9,11 +9,11 @@ class MainViewModel(private val context: Context, private val onStartIndex: Int)
     private var quotes: Array<Quote> = emptyArray()
     private var index: Int = 0
     private var size: Int = 0
+    var searchIndex = -1
 
     init {
         quotes = loadQuotesFromAssets()
         size = quotes.size
-
         index = onStartIndex
     }
 
@@ -30,21 +30,26 @@ class MainViewModel(private val context: Context, private val onStartIndex: Int)
         return gson.fromJson(json, Array <Quote>::class.java)
     }
 
-    fun getQuote(): TmpQuote {
-        return TmpQuote(quotes[index].text, quotes[index].author, index +1)
-    }
-
-    fun nextQuote(): TmpQuote {
-        (index++)%size
-        return TmpQuote(quotes[index].text, quotes[index].author, index +1)
-    }
-
-    fun previousQuote(): TmpQuote {
-        index -= 1-size
-        index %= size
-        return TmpQuote(quotes[index].text, quotes[index].author, index +1)
-    }
-
     fun getIndex() = index
     fun getSize() = size
+
+    fun getQuote(): Quote {
+        return Quote(quotes[index].text, quotes[index].author, index +1)
+    }
+
+    fun nextQuote(): Quote {
+        (index++)%size
+        return Quote(quotes[index].text, quotes[index].author, index +1)
+    }
+
+    fun previousQuote(): Quote {
+        index -= 1-size
+        index %= size
+        return Quote(quotes[index].text, quotes[index].author, index +1)
+    }
+
+    fun searchQuote(i: Int) {
+        index = i
+    }
+
 }

@@ -3,9 +3,11 @@ package com.example.quotes
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.content.res.Resources
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.widget.Toast
@@ -20,6 +22,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setTheme(R.style.Theme_Quotes)
         setContentView(R.layout.activity_main)
 
         val sharedPref = getSharedPreferences("quoteIndex", Context.MODE_PRIVATE)
@@ -27,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         var onStartIndex = sharedPref.getInt("currentIndex", 0)
         if(onStartIndex < 0) onStartIndex = 0
 
-//        Log.d("main", "after $onStartIndex")
+        Log.d("main", "after $onStartIndex")
 
         mainVM = ViewModelProvider(this, MainViewModelFactory(applicationContext, onStartIndex))
                     .get(MainViewModel::class.java)
@@ -39,8 +42,7 @@ class MainActivity : AppCompatActivity() {
         val searchView = layoutInflater.inflate(R.layout.search_dialog, null)
         val input = searchView.findViewById<EditText>(R.id.etInput)
 
-        val searchAlert = AlertDialog.Builder(this)
-                .setTitle("Enter ID")
+        val searchAlert = AlertDialog.Builder(this, R.style.splashScreenTheme)
                 .setIcon(R.drawable.ic_search)
                 .setView(searchView)
                 .setPositiveButton("Search") { _, _ ->
@@ -49,15 +51,12 @@ class MainActivity : AppCompatActivity() {
                     key = if(tmp.isNotEmpty()) tmp.toInt()
                     else -1
                     input.text.clear()
-                    if(key in 0 until size) {
-                        val searchVM = ViewModelProvider(this, SearchVMFactory(applicationContext, key))
-                                .get(MainViewModel::class.java)
-
-                        Toast.makeText(this, "coming soon...", Toast.LENGTH_SHORT).show()
-                        setQuote(searchVM.getQuote())
+                    if(key != -1 && key-1 < size) {
+                        mainVM.searchQuote(key-1)
+                        setQuote(mainVM.getQuote())
                     }
                     else {
-                        Toast.makeText(this, "coming soon...", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Not found", Toast.LENGTH_SHORT).show()
                     }
                 }
                 .setNegativeButton("Cancel") { _, _ ->
@@ -66,16 +65,15 @@ class MainActivity : AppCompatActivity() {
                 .create()
 
         btnSearch.setOnClickListener {
-            Toast.makeText(this, "coming soon...", Toast.LENGTH_SHORT).show()
-//            searchAlert.show()
+            searchAlert.show()
         }
 
     }
-    private fun setQuote(tmpQuote: TmpQuote) {
-        quoteText.text = tmpQuote.text
-        if(tmpQuote.author == null) quoteAuthor.text = "Anonymous"
-        else quoteAuthor.text = tmpQuote.author
-        tvQuoteID.text = tmpQuote.id.toString()
+    private fun setQuote(quote: Quote) {
+        quoteText.text = quote.text
+        if(quote.author == null) quoteAuthor.text = "Anonymous"
+        else quoteAuthor.text = quote.author
+        tvQuoteID.text = quote.id.toString()
     }
 
     fun onPrevious(view: View) {
@@ -89,7 +87,7 @@ class MainActivity : AppCompatActivity() {
     fun onShare(view: View) {
         val intent = Intent(Intent.ACTION_SEND)
         intent.type = "text/plain"
-        intent.putExtra(Intent.EXTRA_TEXT, tvQuoteID.text.toString() + ". " + quoteText.text.toString() + "- " + quoteAuthor.text.toString())
+        intent.putExtra(Intent.EXTRA_TEXT, tvQuoteID.text.toString() + ". " + "\"" + quoteText.text.toString() + "\"" + "\n- " + quoteAuthor.text.toString())
         val chooser = Intent.createChooser(intent, "Share this quote using...")
         startActivity(chooser)
     }
@@ -105,6 +103,4 @@ class MainActivity : AppCompatActivity() {
             apply()
         }
     }
-
-    fun onSearch(view: View) {}
 }
